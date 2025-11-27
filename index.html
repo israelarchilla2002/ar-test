@@ -104,7 +104,7 @@ AFRAME.registerComponent('conexion_db', {
             }
         }).catch(error => {
             document.getElementById("arjs-loader").innerHTML = `<div>Error conectando con la API :(</div>`;
-            alert("Error de conexión con la API:", error);
+            alert(`Error de conexión con la API: ${error.message}`);
         });
     },
 
