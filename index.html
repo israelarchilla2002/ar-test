@@ -76,5 +76,15 @@
              <a-entity camera></a-entity>
 
         </a-scene>
+
+        <script>
+          window.addEventListener('arjs-nft-loaded', function () {
+            var loader = document.querySelector(".arjs-loader");
+            if (loader) {
+              loader.style.display = "none";
+            }
+          });
+        </script>
+
     </body>
 </html>
