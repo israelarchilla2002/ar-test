@@ -80,12 +80,12 @@
         </a-scene>
 
         <script>
-          window.addEventListener('arjs-nft-loaded', function () {
+          window.load=function () {
             var loader = document.querySelector(".arjs-loader");
             if (loader) {
               loader.style.display = "none";
             }
-          });
+          };
         </script>
 
     </body>
