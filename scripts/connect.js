@@ -10,7 +10,7 @@ AFRAME.registerComponent('conexion_db', {
         console.log("Intentando realizar conexión con la DB.");
 
         if (!this.data.url){
-            console.error("ERROR: No se ha establecido ninguna URL con la que conectar.");
+            alert("ERROR: No se ha establecido ninguna URL con la que conectar.");
             return;
         }
 
@@ -26,7 +26,10 @@ AFRAME.registerComponent('conexion_db', {
     syncData: function() {
         fetch(this.data.url).then(response => {
             //Si no hay respuesta, indica que hubo un fallo de conexión
-            if(!response.ok) throw new Error("Error de conexión. Comprueba el estado de red.");
+            if(!response.ok){ 
+                alert("Ha habido un error de conexión");
+                throw new Error("Error de conexión. Comprueba el estado de red.");
+            }
             return response.json();
         }).then(data => {
             //Establecemos el color
@@ -40,7 +43,7 @@ AFRAME.registerComponent('conexion_db', {
                 this.el.setAttribute('scale', {x: sz, y: sz, z: sz});
             }
         }).catch(error => {
-            console.warn("Error de conexión con la API:", error);
+            alert("Error de conexión con la API:", error);
         });
     },
 
