@@ -31,17 +31,16 @@
         <title>Prueba webapp AR</title>
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-
-        <!-- Script de conexión a la API -->
-        <script src="/scripts/connect.js"></script>
-
     </head>
 
     <body style="margin: 0; overflow: hidden">
-
+        
         <div id="arjs-loader" class="arjs-loader">
             <div>Inicializando...</div>
         </div>
+
+        <!-- Script de conexión a la API -->
+        <script src="/scripts/connect.js"></script>
 
         <script>
             document.getElementById("arjs-loader").innerHTML = `<div>Prueba de cambio de texto</div>`;
