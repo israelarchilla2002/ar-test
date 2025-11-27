@@ -1,82 +1,92 @@
 <!DOCTYPE html>
+<style>
+  .arjs-loader {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .arjs-loader div {
+    text-align: center;
+    font-size: 1.25em;
+    color: white;
+  }
+</style>
+
+    <!-- Scripts descargados desde la CDN -->
+    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+
 <html>
     <head>
+
         <meta charset="UTF-8">
-        <title>Prueba webapp AR - Hiro Marker</title>
+        <title>Prueba webapp AR</title>
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-        <style>
-          .arjs-loader {
-            height: 100%;
-            width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
-        
-          .arjs-loader div {
-            text-align: center;
-            font-size: 1.25em;
-            color: white;
-          }
-        </style>
-
-        <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
-        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     </head>
 
     <body style="margin: 0; overflow: hidden">
-
-        <div class="arjs-loader">
-            <div>Cargando marcador Hiro...</div>
+        
+        <div id="arjs-loader" class="arjs-loader">
+            <div>Inicializando...</div>
         </div>
+
+        <!-- Script de conexión a la API -->
+        <!-- <script src="/scripts/connect.js"></script>
+
+        <script>
+            document.getElementById("arjs-loader").innerHTML = `<div>Prueba de cambio de texto</div>`;
+        </script> -->
 
         <a-scene
             vr-mode-ui="enabled: false;"
             renderer="logarithmicDepthBuffer: true;"
-            embedded 
-            arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
-
-            <a-marker preset="hiro">
+            embedded arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;">
+            <!-- Se encapsula el contenido que se mostrará en un QR bajo un "NFT" -->
+            <a-nft
+                type="nft"
+                url="markers/qr codev prueba arjs"
+                smooth="true"
+                smoothCount="10"
+                smoothTolerance=".01"
+                smoothThreshold="5"
+                >
 
                 <a-box
                     position="0 0.5 0"
                     material="color: red;">
-                    </a-box>
+                </a-box>
             
                 <a-text
                     value="Prueba OK :3c"
-                    position="0 1.5 0" 
+                    position="2 0.5 0"
                     color="black"
-                    align="center"
-                    scale="2 2 2"> 
-                    </a-text>
+                    scale="0.5 0.5 0.5">
+                </a-text>
 
-            </a-marker>
+            </a-nft>
 
-            <a-entity camera></a-entity>
+            <!-- Se crea la cámara para la escena -->
+             <a-entity camera></a-entity>
 
         </a-scene>
 
         <script>
-          // En modo marcadores no existe 'arjs-nft-loaded', usamos el evento de carga de la escena
-          var scene = document.querySelector('a-scene');
-          
-          scene.addEventListener('loaded', function () {
-             var loader = document.querySelector(".arjs-loader");
-             // Pequeño timeout para asegurar que la cámara está lista visualmente
-             setTimeout(function() {
-                 if (loader) {
-                    loader.style.display = "none";
-                 }
-             }, 1000); 
+          window.addEventListener('arjs-nft-loaded', function () {
+            var loader = document.querySelector(".arjs-loader");
+            if (loader) {
+              loader.style.display = "none";
+            }
           });
         </script>
-        
+
     </body>
 </html>
