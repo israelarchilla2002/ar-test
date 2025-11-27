@@ -12,7 +12,7 @@ AFRAME.registerComponent('conexion_db', {
 
         if (!this.data.url){
             document.getElementById("arjs-loader").innerHTML = `<div>No se ha encontrado la base de datos :(</div>`;
-            alert("ERROR: No se ha establecido ninguna URL con la que conectar.");
+            console.log("ERROR: No se ha establecido ninguna URL con la que conectar.");
             return;
         }
 
@@ -29,7 +29,7 @@ AFRAME.registerComponent('conexion_db', {
         fetch(this.data.url).then(response => {
             //Si no hay respuesta, indica que hubo un fallo de conexión
             if(!response.ok){ 
-                alert("Ha habido un error de conexión");
+                console.log("Ha habido un error de conexión");
                 throw new Error("Error de conexión. Comprueba el estado de red.");
             }
             document.getElementById("arjs-loader").innerHTML = `<div>Conexión establecida. Cargando app...</div>`;
@@ -47,7 +47,7 @@ AFRAME.registerComponent('conexion_db', {
             }
         }).catch(error => {
             document.getElementById("arjs-loader").innerHTML = `<div>Error conectando con la API :(</div>`;
-            alert("Error de conexión con la API:", error);
+            console.log("Error de conexión con la API:", error);
         });
     },
 
