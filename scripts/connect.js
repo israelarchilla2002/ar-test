@@ -8,8 +8,10 @@ AFRAME.registerComponent('conexion_db', {
     //Conecta a la base de datos cuando cargue la página
     init: function() {
         console.log("Intentando realizar conexión con la DB.");
+        document.getElementById("arjs-loader").innerHTML = `<div>Conectando con DB...</div>`;
 
         if (!this.data.url){
+            document.getElementById("arjs-loader").innerHTML = `<div>No se ha encontrado la base de datos :(</div>`;
             alert("ERROR: No se ha establecido ninguna URL con la que conectar.");
             return;
         }
@@ -30,6 +32,7 @@ AFRAME.registerComponent('conexion_db', {
                 alert("Ha habido un error de conexión");
                 throw new Error("Error de conexión. Comprueba el estado de red.");
             }
+            document.getElementById("arjs-loader").innerHTML = `<div>Conexión establecida. Cargando app...</div>`;
             return response.json();
         }).then(data => {
             //Establecemos el color
@@ -43,6 +46,7 @@ AFRAME.registerComponent('conexion_db', {
                 this.el.setAttribute('scale', {x: sz, y: sz, z: sz});
             }
         }).catch(error => {
+            document.getElementById("arjs-loader").innerHTML = `<div>Error conectando con la API :(</div>`;
             alert("Error de conexión con la API:", error);
         });
     },

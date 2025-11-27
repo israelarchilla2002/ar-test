@@ -40,8 +40,12 @@
     <body style="margin: 0; overflow: hidden">
 
         <div id="arjs-loader" class="arjs-loader">
-            <div>Loading, please wait...</div>
+            <div>Inicializando...</div>
         </div>
+
+        <script>
+            document.getElementById("arjs-loader").innerHTML = `<div>Prueba de cambio de texto</div>`;
+        </script>
 
         <a-scene
             vr-mode-ui="enabled: false;"
