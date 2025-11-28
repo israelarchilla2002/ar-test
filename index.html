@@ -32,10 +32,6 @@
 
     <body style="margin: 0; overflow: hidden">
 
-        <div class="arjs-loader">
-            <div>Cargando marcador...</div>
-        </div>
-
         <a-scene
             vr-mode-ui="enabled: false;"
             renderer="logarithmicDepthBuffer: true;"
@@ -50,10 +46,9 @@
                     </a-box>
             
                 <a-text
-                    value="Prueba OK :3c"
+                    value="Prueba OK"
                     position="0 1.5 0" 
                     color="black"
-                    align="center"
                     scale="2 2 2"> 
                     </a-text>
 
@@ -62,21 +57,6 @@
             <a-entity camera></a-entity>
 
         </a-scene>
-
-        <script>
-          // En modo marcadores no existe 'arjs-nft-loaded', usamos el evento de carga de la escena
-          var scene = document.querySelector('a-scene');
-          
-          scene.addEventListener('loaded', function () {
-             var loader = document.querySelector(".arjs-loader");
-             // Pequeño timeout para asegurar que la cámara está lista visualmente
-             setTimeout(function() {
-                 if (loader) {
-                    loader.style.display = "none";
-                 }
-             }, 1000); 
-          });
-        </script>
         
     </body>
 </html>
