@@ -1,3 +1,5 @@
+console.log("Script connect.js cargado");
+
 //Establecer conexion con API
 AFRAME.registerComponent('conexion_db', {
     schema: {
