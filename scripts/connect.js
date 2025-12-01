@@ -28,26 +28,26 @@ AFRAME.registerComponent('conexion-db', {
 
     fetch(this.data.url)
       .then(response => {
-        let data = response.json();
-        this.consoleDiv.innerHTML = `<p>${response}</p>`;
-        // 1. ACTUALIZAMOS LA ESCENA 3D (Tu código normal)
-        if (data.color) this.el.setAttribute('material', 'color', data.color);
-        if (data.size) {
-            let s = parseFloat(data.size);
-            this.el.setAttribute('scale', {x: s, y: s, z: s});
-        }
+        // let data = response.json();
+        // this.consoleDiv.innerHTML = `<p>${response}</p>`;
+        // // 1. ACTUALIZAMOS LA ESCENA 3D (Tu código normal)
+        // if (data.color) this.el.setAttribute('material', 'color', data.color);
+        // if (data.size) {
+        //     let s = parseFloat(data.size);
+        //     this.el.setAttribute('scale', {x: s, y: s, z: s});
+        // }
 
-        // 2. ACTUALIZAMOS EL TEXTO EN PANTALLA
-        // Usamos JSON.stringify para convertir el objeto de datos a texto legible
-        let mensaje = `
-          <strong>[${hora}] Datos recibidos:</strong><br>
-          Color: ${data.color}<br>
-          Escala: ${data.size}<br>
-          Visible: ${data.visible}
-        `;
+        // // 2. ACTUALIZAMOS EL TEXTO EN PANTALLA
+        // // Usamos JSON.stringify para convertir el objeto de datos a texto legible
+        // let mensaje = `
+        //   <strong>[${hora}] Datos recibidos:</strong><br>
+        //   Color: ${data.color}<br>
+        //   Escala: ${data.size}<br>
+        //   Visible: ${data.visible}
+        // `;
         
         if (this.consoleDiv) {
-            this.consoleDiv.innerHTML = mensaje;
+            this.consoleDiv.innerHTML = response.json();
             this.consoleDiv.style.color = "#00FF00"; // Verde si todo va bien
         }
       })
