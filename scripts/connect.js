@@ -30,7 +30,7 @@ AFRAME.registerComponent('conexion-db', {
   .then(response => response.json())   // ← aquí devolvemos la promesa
   .then(data => {                      // ← aquí recibimos el JSON ya convertido
 
-    this.consoleDiv.innerHTML = `<p>${JSON.stringify(data)}</p>`;
+    this.consoleDiv.innerHTML = `<p>${data}</p>`;
 
     // 1. ACTUALIZAMOS LA ESCENA 3D
     if (data.color) this.el.setAttribute('material', 'color', data.color);
