@@ -1,6 +1,5 @@
 <?php
-    //Cabeceras
-    header("Content-Type: application/json; chartset=UTF-8");
+    header("Content-Type: application/json; charset=UTF-8");
 
     //Datos de la conexión
     include_once("variables/connection.php");
