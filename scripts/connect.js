@@ -2,7 +2,7 @@ console.log("Script connect.js cargado");
 
 window.addEventListener("load", (event) => {
   let id = document.getElementById("qr0");
-  console.log(id.value);
+  console.log("value: " + id.value);
 });
 
 //Establecer conexion con API
