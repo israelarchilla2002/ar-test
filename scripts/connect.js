@@ -6,57 +6,60 @@ window.addEventListener("load", (event) => {
 });
 
 //Establecer conexion con API
-AFRAME.registerComponent('conexion_db', {
-    schema: {
-        url: {type: 'string', default: ''}, //URL, que en el caso para hacer pruebas en local usaremos la del NAS
-        interval: {type: 'number', default: 5000} //Cada cuantos ms se hace una llamada
-    },
+AFRAME.registerComponent('conexion-db', {
+  schema: {
+    url: { type: 'string', default: '' },
+    interval: { type: 'number', default: 2000 }
+  },
 
-    //Conecta a la base de datos cuando cargue la página
-    init: function() {
-        console.log("Intentando realizar conexión con la DB.");
+  init: function () {
+    // Referencia al div de la pantalla
+    this.consoleDiv = document.getElementById('consola-datos');
+    
+    if (this.data.url) {
+      this.syncData();
+      this.timer = setInterval(() => this.syncData(), this.data.interval);
+    }
+  },
 
-        if (!this.data.url){
-            console.log("ERROR: No se ha establecido ninguna URL con la que conectar.");
-            return;
+  syncData: function () {
+    // Añadimos un timestamp para ver que se actualiza
+    let hora = new Date().toLocaleTimeString();
+
+    fetch(this.data.url)
+      .then(response => response.json())
+      .then(data => {
+        // 1. ACTUALIZAMOS LA ESCENA 3D (Tu código normal)
+        if (data.color) this.el.setAttribute('material', 'color', data.color);
+        if (data.size) {
+            let s = parseFloat(data.size);
+            this.el.setAttribute('scale', {x: s, y: s, z: s});
         }
 
-        this.syncData(); //Primera sincronización en cuanto conecta con la DB
+        // 2. ACTUALIZAMOS EL TEXTO EN PANTALLA
+        // Usamos JSON.stringify para convertir el objeto de datos a texto legible
+        let mensaje = `
+          <strong>[${hora}] Datos recibidos:</strong><br>
+          Color: ${data.color}<br>
+          Escala: ${data.size}<br>
+          Visible: ${data.visible}
+        `;
+        
+        if (this.consoleDiv) {
+            this.consoleDiv.innerHTML = mensaje;
+            this.consoleDiv.style.color = "#00FF00"; // Verde si todo va bien
+        }
+      })
+      .catch(error => {
+        // SI HAY ERROR, LO MOSTRAMOS EN ROJO
+        if (this.consoleDiv) {
+            this.consoleDiv.innerHTML = `[${hora}] ERROR: ${error.message}`;
+            this.consoleDiv.style.color = "red";
+        }
+      });
+  },
 
-        //Cronómetro para ver cada cuanto realiza la llamada
-        this.timer = setInterval(() => {
-            this.syncData();
-        }, this.data.interval);
-    },
-
-    //Sincroniza los datos con el objeto indicado
-    syncData: function() {
-        fetch(this.data.url).then(response => {
-            //Si no hay respuesta, indica que hubo un fallo de conexión
-            if(!response.ok){ 
-                console.log("Ha habido un error de conexión");
-                throw new Error("Error de conexión. Comprueba el estado de red.");
-            }
-            console.log("Conexión establecida con la base de datos");
-            return response.json();
-        }).then(data => {
-            //Establecemos el color
-            if(data.color) {
-                this.el.setAttribute('material', 'color', data.color);
-            }
-
-            //Establecemos el tamaño (a partir de una escala)
-            if(data.size){
-                let sz = parseFloat(data.size); //Por si acaso se pasara como string
-                this.el.setAttribute('scale', {x: sz, y: sz, z: sz});
-            }
-        }).catch(error => {
-            console.log("Error de conexión con la API:", error);
-        });
-    },
-
-    //Reinicio de cronómetro en caso de implementarlo como app
-    remove: function(){
-        if (this.timer) clearInterval(this.timer);
-    }
+  remove: function () {
+    if (this.timer) clearInterval(this.timer);
+  }
 });
