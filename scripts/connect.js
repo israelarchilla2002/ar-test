@@ -28,32 +28,35 @@ AFRAME.registerComponent('conexion-db', {
 
     fetch(this.data.url)
   .then(response => response.json())   // ← aquí devolvemos la promesa
-  .then(data => {                      // ← aquí recibimos el JSON ya convertido
-
-    this.consoleDiv.innerHTML = `<p>${data}</p>`;
-
-    // 1. ACTUALIZAMOS LA ESCENA 3D
-    if (data.color) this.el.setAttribute('material', 'color', data.color);
-
-    if (data.size) {
-      let s = parseFloat(data.size);
-      this.el.setAttribute('scale', { x: s, y: s, z: s });
-    }
-
-    // 2. TEXTO EN PANTALLA
-    let hora = new Date().toLocaleTimeString();
-    let mensaje = `
-      <strong>[${hora}] Datos recibidos:</strong><br>
-      Color: ${data.color}<br>
-      Escala: ${data.size}<br>
-      Visible: ${data.visible}
-    `;
-
-    if (this.consoleDiv) {
-      this.consoleDiv.innerHTML = mensaje;
-      this.consoleDiv.style.color = "#00FF00";
-    }
+  .then(texto => {
+    this.consoleDiv.innerHTML = `CRUDO: ${texto}`;
   })
+//   .then(data => {                      // ← aquí recibimos el JSON ya convertido
+
+//     this.consoleDiv.innerHTML = `<p>${data}</p>`;
+
+//     // 1. ACTUALIZAMOS LA ESCENA 3D
+//     if (data.color) this.el.setAttribute('material', 'color', data.color);
+
+//     if (data.size) {
+//       let s = parseFloat(data.size);
+//       this.el.setAttribute('scale', { x: s, y: s, z: s });
+//     }
+
+//     // 2. TEXTO EN PANTALLA
+//     let hora = new Date().toLocaleTimeString();
+//     let mensaje = `
+//       <strong>[${hora}] Datos recibidos:</strong><br>
+//       Color: ${data.color}<br>
+//       Escala: ${data.size}<br>
+//       Visible: ${data.visible}
+//     `;
+
+//     if (this.consoleDiv) {
+//       this.consoleDiv.innerHTML = mensaje;
+//       this.consoleDiv.style.color = "#00FF00";
+//     }
+//   })
   .catch(error => {
     if (this.consoleDiv) {
       this.consoleDiv.innerHTML = `ERROR: ${error.message}`;
