@@ -11,8 +11,8 @@
         die(json_encode(["error" => "ERROR: Fallo al conectar con la BD: " . $con->connect_error]));
     }
 
-    //selecciono el modelo test1 para probar
-    $consulta = "SELECT sz_model, clr_model FROM modelos WHERE id='test1' LIMIT 1";
+    //selecciono el modelo 1 para probar
+    $consulta = "SELECT sz_model, clr_model FROM modelos WHERE id=1 LIMIT 1";
     $resultado = $con->query($consulta);
 
     //Mappeo de datos al modelo
