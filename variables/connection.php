@@ -1,8 +1,8 @@
 <?php
     //Conexion a la DB
-    $server = "bqrtuyaorhoowe1pv1r7-mysql.services.clever-cloud.com:3306";
-    $user = "udq1e8f0d8fhkbof";
-    $pass = "Zh59m0oQBdMPZNsDeyEa";
-    $db = "artest";
+    $server = "0k1y9y.h.filess.io:3305";
+    $user = "artest_itselfeast";
+    $pass = "602fa15c16f15cc16ca62f1788f421c1e75fa6d1";
+    $db = "artest_itselfeast";
 
 ?>
