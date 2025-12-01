@@ -28,9 +28,8 @@ AFRAME.registerComponent('conexion-db', {
 
     fetch(this.data.url)
       .then(response => {
-            response.json();
-            this.consoleDiv.innerHTML = `<p>${response}</p>`;
-        }, data => {
+        let data = response.json();
+        this.consoleDiv.innerHTML = `<p>${response}</p>`;
         // 1. ACTUALIZAMOS LA ESCENA 3D (Tu código normal)
         if (data.color) this.el.setAttribute('material', 'color', data.color);
         if (data.size) {
