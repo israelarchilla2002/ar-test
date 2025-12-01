@@ -32,6 +32,7 @@ AFRAME.registerComponent('conexion_db', {
                 console.log("Ha habido un error de conexión");
                 throw new Error("Error de conexión. Comprueba el estado de red.");
             }
+            console.log("Conexión establecida con la base de datos");
             return response.json();
         }).then(data => {
             //Establecemos el color
