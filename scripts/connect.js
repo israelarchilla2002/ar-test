@@ -27,37 +27,39 @@ AFRAME.registerComponent('conexion-db', {
     let hora = new Date().toLocaleTimeString();
 
     fetch(this.data.url)
-      .then(response => {
-        // let data = response.json();
-        // this.consoleDiv.innerHTML = `<p>${response}</p>`;
-        // // 1. ACTUALIZAMOS LA ESCENA 3D (Tu código normal)
-        // if (data.color) this.el.setAttribute('material', 'color', data.color);
-        // if (data.size) {
-        //     let s = parseFloat(data.size);
-        //     this.el.setAttribute('scale', {x: s, y: s, z: s});
-        // }
+  .then(response => response.json())   // ← aquí devolvemos la promesa
+  .then(data => {                      // ← aquí recibimos el JSON ya convertido
 
-        // // 2. ACTUALIZAMOS EL TEXTO EN PANTALLA
-        // // Usamos JSON.stringify para convertir el objeto de datos a texto legible
-        // let mensaje = `
-        //   <strong>[${hora}] Datos recibidos:</strong><br>
-        //   Color: ${data.color}<br>
-        //   Escala: ${data.size}<br>
-        //   Visible: ${data.visible}
-        // `;
-        
-        if (this.consoleDiv) {
-            this.consoleDiv.innerHTML = response.json();
-            this.consoleDiv.style.color = "#00FF00"; // Verde si todo va bien
-        }
-      })
-      .catch(error => {
-        // SI HAY ERROR, LO MOSTRAMOS EN ROJO
-        if (this.consoleDiv) {
-            this.consoleDiv.innerHTML = `[${hora}] ERROR: ${error.message}`;
-            this.consoleDiv.style.color = "red";
-        }
-      });
+    this.consoleDiv.innerHTML = `<p>${JSON.stringify(data)}</p>`;
+
+    // 1. ACTUALIZAMOS LA ESCENA 3D
+    if (data.color) this.el.setAttribute('material', 'color', data.color);
+
+    if (data.size) {
+      let s = parseFloat(data.size);
+      this.el.setAttribute('scale', { x: s, y: s, z: s });
+    }
+
+    // 2. TEXTO EN PANTALLA
+    let hora = new Date().toLocaleTimeString();
+    let mensaje = `
+      <strong>[${hora}] Datos recibidos:</strong><br>
+      Color: ${data.color}<br>
+      Escala: ${data.size}<br>
+      Visible: ${data.visible}
+    `;
+
+    if (this.consoleDiv) {
+      this.consoleDiv.innerHTML = mensaje;
+      this.consoleDiv.style.color = "#00FF00";
+    }
+  })
+  .catch(error => {
+    if (this.consoleDiv) {
+      this.consoleDiv.innerHTML = `ERROR: ${error.message}`;
+      this.consoleDiv.style.color = "red";
+    }
+  });
     
   },
 
