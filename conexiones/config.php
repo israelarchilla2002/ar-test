@@ -1,8 +1,7 @@
 <?php
     header("Content-Type: application/json; charset=UTF-8");
 
-    //Datos de la conexión
-    include("variables/connection.php");
+    include("variables\connection.php");
 
     $con = new mysqli($server, $user, $pass, $db);
 
@@ -11,7 +10,7 @@
     }
 
     //selecciono el modelo 1 para probar
-    $consulta = "SELECT sz_model, clr_model FROM modelos WHERE id=1 LIMIT 1";
+    $consulta = "SELECT sz_model, clr_model FROM modelos WHERE id=1";
     $resultado = $con->query($consulta);
 
     //Mappeo de datos al modelo
@@ -19,8 +18,8 @@
         $col = $resultado->fetch_assoc();
 
         $res = array(
-            "color" => $col['clr_model'],
-            "size" => $col['sz_model']
+            'color' => $col['clr_model'],
+            'size' => $col['sz_model']
         );
         
         echo json_encode($res);
