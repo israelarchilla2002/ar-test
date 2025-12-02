@@ -27,10 +27,10 @@
         </style>
 
 
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js" integrity="sha512-Znnj7n0C0Xz1tdk6ih39WPm3kSCTZEKnX/7WaNbySW7GFbwSjO5r9/uOAGLMbgv6llI1GdghC7xdaQsFUStM1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
-        <script src="scripts/connect.js"></script>
+        <!-- <script src="scripts/connect.js"></script> -->
         </head>
 
     <body style='margin: 0px; overflow: hidden;'>
@@ -66,9 +66,18 @@
         <a-entity camera></a-entity>
         </a-scene>
 
-        
+        <script>
+          const consoleDiv = document.getElementById('consola-datos');
+          $.ajax({
+            url: "/conexiones/config.php",
+            type: "GET",
+            async: false,
+            success: function(respuesta){
+              consoleDiv.innerHTML = `Recibido: ${respuesta}`;
+            }
+          });
+        </script>
     </body>
 </html>
 
-</html>
 

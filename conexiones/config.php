@@ -27,4 +27,6 @@
     } else {
         echo json_encode(["mensaje" => "El objeto indicado no existe"]);
     }
+
+    mysqli_close($con);
 ?>
