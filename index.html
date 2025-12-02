@@ -73,7 +73,7 @@
               url: "/conexiones/config.php",
               type: "POST",
               contentType: 'application/json',
-              dataType: 'text',
+              dataType: 'json',
               success: function(respuesta){
                 consoleDiv.innerHTML = `Recibido: ${respuesta}`;
                 console.log("Recibida la respuesta: ", respuesta);
