@@ -2,7 +2,7 @@
     header("Content-Type: application/json; charset=UTF-8");
 
     //Datos de la conexión
-    include_once("variables/connection.php");
+    include("variables/connection.php");
 
     $con = new mysqli($server, $user, $pass, $db);
 
