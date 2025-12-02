@@ -29,7 +29,7 @@ window.onload = function() {
                     marker0Box.setAttribute('color', color);
                     marker0Box.setAttribute('scale', `${size} ${size} ${size}`);
                     const horaAct = new Date();
-                    consoleDiv.innerHTML = `Datos de Firebase cargados: Color=${color}, Tamaño=${size}.\nActualizados a las [${now.toLocaleTimeString()}]`;
+                    consoleDiv.innerHTML = `Datos de Firebase cargados: Color=${color}, Tamaño=${size}.\nActualizados a las [${horaAct.toLocaleTimeString()}]`;
                 } else {
                     consoleDiv.innerHTML = `ERROR: No se encontró el elemento a-box del marcador 0.`;
                 }
