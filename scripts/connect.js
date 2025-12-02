@@ -12,7 +12,8 @@ AFRAME.registerComponent('conexion-db', {
     this.consoleDiv = document.getElementById('consola-datos');
     
     if (this.data.url) {
-      this.syncData();
+      // this.syncData();
+      this.debugFetch();
       this.timer = setInterval(() => this.syncData(), this.data.interval);
     }
   },
