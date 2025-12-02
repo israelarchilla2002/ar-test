@@ -30,6 +30,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js" integrity="sha512-Znnj7n0C0Xz1tdk6ih39WPm3kSCTZEKnX/7WaNbySW7GFbwSjO5r9/uOAGLMbgv6llI1GdghC7xdaQsFUStM1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
         <!-- <script src="scripts/connect.js"></script> -->
         </head>
 
@@ -52,10 +54,65 @@
         <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 5x5;'>
 
         <a-marker id="qr0" type='barcode' value='0'>
-            <a-box position='0 0.5 0' rotation='-90 0 0' conexion-db="url: conexiones/config.php; interval: 1000"></a-box>
+            <a-box position='0 0.5 0' rotation='-90 0 0'></a-box>
             <a-text value='Prueba del marcador 0\nAll OK' position='2 0.5 0'></a-text>
         </a-marker>
 
+        <script>
+  // REEMPLAZA ESTO con los datos de configuración de tu proyecto
+  const firebaseConfig = {
+    apiKey: "AIzaSyDO_C2ZChRJXxd0pgZ_jsVa1-kwYMqcyzY",
+    authDomain: "c4d2v-1r-t2st.firebaseapp.com",
+    projectId: "c4d2v-1r-t2st",
+    storageBucket: "c4d2v-1r-t2st.firebasestorage.app",
+    messagingSenderId: "816530265874",
+    appId: "1:816530265874:web:30b752fd785c708e8f85cb"
+  };
+
+  // Inicializa Firebase
+  firebase.initializeApp(firebaseConfig);
+  // Inicializa Firestore
+  const db = firebase.firestore();
+
+  // Función para obtener y aplicar los datos
+  function getModelData() {
+      // Consulta el documento 'test1' en la colección 'modelos'
+      db.collection("modelos").doc("1").get()
+          .then((doc) => {
+              const consoleDiv = document.getElementById('consola-datos');
+              if (doc.exists) {
+                  const data = doc.data();
+                  
+                  // Extrae el color y el tamaño
+                  const color = data.clr_model || 'gray'; // Valor por defecto si no existe
+                  const size = data.sz_model || 1; // Valor por defecto si no existe
+                  
+                  // Aplica los datos al marcador de A-Frame (Ejemplo con marcador 0)
+                  const marker0Box = document.querySelector('a-marker[value="0"] a-box');
+                  if (marker0Box) {
+                      marker0Box.setAttribute('color', color);
+                      marker0Box.setAttribute('scale', `${size} ${size} ${size}`);
+                      consoleDiv.innerHTML = `Datos de Firebase cargados: Color=${color}, Tamaño=${size}`;
+                  } else {
+                      consoleDiv.innerHTML = `ERROR: No se encontró el elemento a-box del marcador 0.`;
+                  }
+              } else {
+                  consoleDiv.innerHTML = `ERROR: El documento 'test1' no existe en Firebase.`;
+              }
+          })
+          .catch((error) => {
+              const consoleDiv = document.getElementById('consola-datos');
+              consoleDiv.innerHTML = `ERROR al leer Firebase: ${error}`;
+              console.error("Error al obtener el documento:", error);
+          });
+  }
+
+  // Llama a la función al cargar la escena
+  window.onload = function() {
+      // Asegúrate de que tienes un div con id="consola-datos" en tu body para ver los mensajes
+      getModelData();
+  };
+</script>
 
         <a-marker type='barcode' value='1'>
             <a-box position='0 0.5 0' color="blue" rotation='-90 0 0'></a-box>
@@ -65,28 +122,7 @@
         <!-- use this <a-entity camera> to support multiple-markers, otherwise use <a-marker-camera> instead of </a-marker> -->
         <a-entity camera></a-entity>
         </a-scene>
-
-        <script>
-          $(function () {
-            const consoleDiv = document.getElementById('consola-datos');
-            $.ajax({
-              url: "conexiones/config.php",
-              type: "GET",
-              contentType: 'application/json',
-              dataType: 'json',
-              success: function(respuesta){
-                consoleDiv.innerHTML = `Recibido: ${respuesta}`;
-                console.log("Recibida la respuesta: ", respuesta);
-              },
-              error: function(xhr, status, error){
-                consoleDiv.innerHTML = `ERROR: ${error}`;
-                console.log("Error: ", error);
-                console.log("XHR: ", xhr);
-              }
-            });
-          })
-          
-        </script>
+    
     </body>
 </html>
 
