@@ -71,7 +71,7 @@
             const consoleDiv = document.getElementById('consola-datos');
             $.ajax({
               url: "conexiones/config.php",
-              type: "POST",
+              type: "GET",
               contentType: 'application/json',
               dataType: 'json',
               success: function(respuesta){
