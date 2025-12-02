@@ -1,7 +1,7 @@
 <?php
     header("Content-Type: application/json; charset=UTF-8");
 
-    include('..\variables\connection.php');
+    include('https://raw.githubusercontent.com/israelarchilla2002/ar-test/refs/heads/main/variables/connection.php');
 
     $con = new mysqli($server, $user, $pass, $db);
 
@@ -28,4 +28,5 @@
     }
 
     mysqli_close($con);
+
 ?>
