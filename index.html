@@ -71,7 +71,6 @@
           $.ajax({
             url: "/conexiones/config.php",
             type: "GET",
-            async: false,
             success: function(respuesta){
               consoleDiv.innerHTML = `Recibido: ${respuesta}`;
             }
