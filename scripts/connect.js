@@ -1,126 +1,47 @@
-console.log("Script connect.js cargado");
+const firebaseConfig = {
+  apiKey: "AIzaSyDO_C2ZChRJXxd0pgZ_jsVa1-kwYMqcyzY",
+  authDomain: "c4d2v-1r-t2st.firebaseapp.com",
+  projectId: "c4d2v-1r-t2st",
+  storageBucket: "c4d2v-1r-t2st.firebasestorage.app",
+  messagingSenderId: "816530265874",
+  appId: "1:816530265874:web:30b752fd785c708e8f85cb"
+};
 
-//Establecer conexion con API
-AFRAME.registerComponent('conexion-db', {
-  schema: {
-    url: { type: 'string', default: '' },
-    interval: { type: 'number', default: 2000 }
-  },
+// Inicializa Firebase
+firebase.initializeApp(firebaseConfig);
+// Inicializa Firestore
+const db = firebase.firestore();
 
-  init: function () {
-    // Referencia al div de la pantalla
-    this.consoleDiv = document.getElementById('consola-datos');
-    
-    if (this.data.url) {
-      // this.syncData();
-      this.debugFetch();
-      // this.timer = setInterval(() => this.syncData(), this.data.interval);
-    }
-  },
-
-
-  debugFetch: function () {
-
-    const url = this.data.url;
-    const hora = new Date().toLocaleTimeString();
-
-    console.log("===== DEBUG INICIADO =====");
-    console.log("URL consultada:", url);
-
-    fetch(url, { redirect: "follow" })
-        .then(async (response) => {
-
-            console.log("Estado HTTP:", response.status);
-            console.log("Content-Type:", response.headers.get("content-type"));
-            console.log("¿Redirigido?:", response.redirected);
-            console.log("URL final:", response.url);
-
-            // Primero leemos la respuesta como texto crudo
-            const rawText = await response.text();
-
-            console.log("---- RESPUESTA CRUDA ----");
-            console.log(rawText);
-
-            // Si empieza con "<", seguro es HTML → error
-            if (rawText.trim().startsWith("<")) {
-                console.error("❌ ERROR: El servidor devolvió HTML, NO JSON.");
-                this.consoleDiv.innerHTML =
-                    `<span style="color:red">[${hora}] ERROR: El servidor devolvió HTML, no JSON.</span><br><pre>${rawText.substring(0,300)}</pre>`;
-                return; 
+// Función para obtener y aplicar los datos
+window.onload = function() {
+  const consoleDiv = document.getElementById('consola-datos');
+    db.collection("modelos").doc("1").onSnapshot((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                
+                // Extrae el color y el tamaño
+                const color = data.clr_model || 'gray'; // Valor por defecto si no existe
+                const size = data.sz_model || 1; // Valor por defecto si no existe
+                
+                // Aplica los datos al marcador de A-Frame (Ejemplo con marcador 0)
+                const marker0Box = document.querySelector('a-marker[value="0"] a-box');
+                if (marker0Box) {
+                    marker0Box.setAttribute('color', color);
+                    marker0Box.setAttribute('scale', `${size} ${size} ${size}`);
+                    const horaAct = new Date();
+                    consoleDiv.innerHTML = `Datos de Firebase cargados: Color=${color}, Tamaño=${size}.\nActualizados a las [${now.toLocaleTimeString()}]`;
+                } else {
+                    consoleDiv.innerHTML = `ERROR: No se encontró el elemento a-box del marcador 0.`;
+                }
+            } else {
+                consoleDiv.innerHTML = `ERROR: El documento '1' no existe en Firebase.`;
             }
-
-            // Intentar parsear JSON
-            try {
-                const data = JSON.parse(rawText);
-                console.log("JSON decodificado:", data);
-
-                // Mostrarlo en pantalla
-                this.consoleDiv.innerHTML = `
-                    <strong>[${hora}] JSON recibido:</strong><br>
-                    Color: ${data.color}<br>
-                    Size: ${data.size}<br>
-                `;
-                this.consoleDiv.style.color = "#00FF00";
-
-            } catch (jsonError) {
-                console.error("❌ ERROR PARSEANDO JSON:", jsonError);
-                this.consoleDiv.innerHTML =
-                    `<span style="color:red">[${hora}] ERROR al parsear JSON:</span><br>${jsonError}<br><pre>${rawText.substring(0,300)}</pre>`;
-            }
+        }, (error) => {
+          consoleDiv.innerHTML = `El listener de Firebase falló. Error: ${error}`;
         })
         .catch((error) => {
-            console.error("❌ ERROR FETCH:", error);
-            this.consoleDiv.innerHTML =
-                `<span style="color:red">[${hora}] ERROR en fetch: ${error.message}</span>`;
+            const consoleDiv = document.getElementById('consola-datos');
+            consoleDiv.innerHTML = `ERROR al leer Firebase: ${error}`;
+            console.error("Error al obtener el documento:", error);
         });
-  },
-
-
-  // syncData: function () {
-  //   // Añadimos un timestamp para ver que se actualiza
-  //   let hora = new Date().toLocaleTimeString();
-
-  //   fetch(this.data.url)
-  // .then(response => response.json())   // ← aquí devolvemos la promesa
-  // .then(texto => {
-  //   this.consoleDiv.innerHTML = `CRUDO: ${texto}`;
-  // })
-  // .then(data => {                      // ← aquí recibimos el JSON ya convertido
-
-  //   this.consoleDiv.innerHTML = `<p>${data}</p>`;
-
-  //   // 1. ACTUALIZAMOS LA ESCENA 3D
-  //   if (data.color) this.el.setAttribute('material', 'color', data.color);
-
-  //   if (data.size) {
-  //     let s = parseFloat(data.size);
-  //     this.el.setAttribute('scale', { x: s, y: s, z: s });
-  //   }
-
-  //   // 2. TEXTO EN PANTALLA
-  //   let hora = new Date().toLocaleTimeString();
-  //   let mensaje = `
-  //     <strong>[${hora}] Datos recibidos:</strong><br>
-  //     Color: ${data.color}<br>
-  //     Escala: ${data.size}<br>
-  //     Visible: ${data.visible}
-  //   `;
-
-  //   if (this.consoleDiv) {
-  //     this.consoleDiv.innerHTML = mensaje;
-  //     this.consoleDiv.style.color = "#00FF00";
-  //   }
-  // })
-  // .catch(error => {
-  //   if (this.consoleDiv) {
-  //     this.consoleDiv.innerHTML = `ERROR: ${error.message}`;
-  //     this.consoleDiv.style.color = "red";
-  //   }
-  // });
-    
-  // },
-
-  remove: function () {
-    if (this.timer) clearInterval(this.timer);
-  }
-});
+};
