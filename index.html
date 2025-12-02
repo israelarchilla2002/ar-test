@@ -67,20 +67,23 @@
         </a-scene>
 
         <script>
-          const consoleDiv = document.getElementById('consola-datos');
-          $.ajax({
-            url: "/conexiones/config.php",
-            type: "POST",
-            data: JSON.stringify(jsonObject),
-            contentType: 'application/json',
-            dataType: 'text',
-            success: function(respuesta){
-              consoleDiv.innerHTML = `Recibido: ${respuesta}`;
-            },
-            error: function(xhr, status, error){
-              consoleDiv.innerHTML = `ERROR: ${error}`;
-            }
-          });
+          $(function () {
+            const consoleDiv = document.getElementById('consola-datos');
+            $.ajax({
+              url: "/conexiones/config.php",
+              type: "POST",
+              data: JSON.stringify(jsonObject),
+              contentType: 'application/json',
+              dataType: 'text',
+              success: function(respuesta){
+                consoleDiv.innerHTML = `Recibido: ${respuesta}`;
+              },
+              error: function(xhr, status, error){
+                consoleDiv.innerHTML = `ERROR: ${error}`;
+              }
+            });
+          })
+          
         </script>
     </body>
 </html>
