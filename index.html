@@ -77,9 +77,11 @@
               dataType: 'text',
               success: function(respuesta){
                 consoleDiv.innerHTML = `Recibido: ${respuesta}`;
+                console.log("Recibida la respuesta: ", respuesta);
               },
               error: function(xhr, status, error){
                 consoleDiv.innerHTML = `ERROR: ${error}`;
+                console.log("Error: ", error);
               }
             });
           })
