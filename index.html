@@ -72,7 +72,6 @@
             $.ajax({
               url: "/conexiones/config.php",
               type: "POST",
-              data: JSON.stringify(jsonObject),
               contentType: 'application/json',
               dataType: 'text',
               success: function(respuesta){
