@@ -14,7 +14,7 @@ AFRAME.registerComponent('conexion-db', {
     if (this.data.url) {
       // this.syncData();
       this.debugFetch();
-      this.timer = setInterval(() => this.syncData(), this.data.interval);
+      // this.timer = setInterval(() => this.syncData(), this.data.interval);
     }
   },
 
