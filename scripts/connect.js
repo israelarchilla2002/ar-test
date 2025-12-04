@@ -72,7 +72,7 @@ window.onload = function() {
         // TODO: Añadir un condicional que compruebe si se le ha pasado la URL de un modelo y, de haberlo hecho.
         //        usar el modelo. SI no lo tiene, usar una caja
 
-        const obj = DocumentTimeline.createElement("a-box");
+        const obj = document.createElement("a-box");
 
         const color = data.clr_model || 'gray';
         const size = data.sz_model || 1;
