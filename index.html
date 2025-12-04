@@ -54,12 +54,12 @@
       <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 5x5;'>
 
         <!-- creo el div para ir inyectando los markers dinámicamente usando innerHTML -->
-      <a-entity id="markers">
+      <div id="markers">
         <a-marker id="qr0" type='barcode' value='0'>
             <a-box position='0 0.5 0' rotation='-90 0 0'></a-box>
             <a-text value='Prueba del marcador 0\nAll OK' position='2 0.5 0'></a-text>
         </a-marker>
-      </a-entity>
+      </div>
 
         <script src="scripts/connect.js"></script>
 

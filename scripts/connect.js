@@ -58,11 +58,11 @@ window.onload = function() {
         ...doc.data()
       }));
 
-      consoleDiv.innerHTML = `Documentos obtenidos: ${docsArray.length}<br>`;
+      consoleDiv.innerHTML = `Documentos obtenidos: ${documentos.length}<br>`;
 
       documentos.forEach((el) => {
         const idMarker = el.id;
-        const marker = this.document.createElement("a-marker");
+        const marker = document.createElement("a-marker");
         // Se utiliza el ID de la base de datos tanto para identificar al marcador como para indicarle que valor de barcode va a utilizar
         marker.setAttribute("id", idMarker);
         marker.setAttribute("type", "barcode");
