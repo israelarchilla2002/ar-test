@@ -62,29 +62,14 @@ window.onload = function() {
 
       documentos.forEach((el) => {
         const idMarker = el.id;
-        const marker = document.createElement("a-marker");
-        // Se utiliza el ID de la base de datos tanto para identificar al marcador como para indicarle que valor de barcode va a utilizar
-        marker.setAttribute("id", idMarker);
-        marker.setAttribute("type", "barcode");
-        marker.setAttribute("value", idMarker);
+        const color = el.clr_model || "white";
+        const size = el.sz_model || 1;
+        // Insertar en el container un marker con una caja por cada documento
+        container.innerHTML = `<a-marker id="${idMarker}" type="barcode" value="${idMarker}">
+        <a-box position='0 0.5 0' rotation='-90 0 0' color="${color} scale="${size} ${size} ${size}"></a-box>
+        </a-marker>`;
 
-        // Por ahora voy a insertar cajas para ir probando
-        // TODO: Añadir un condicional que compruebe si se le ha pasado la URL de un modelo y, de haberlo hecho.
-        //        usar el modelo. SI no lo tiene, usar una caja
-
-        const obj = document.createElement("a-box");
-
-        const color = data.clr_model || 'gray';
-        const size = data.sz_model || 1;
-        obj.setAttribute("color", color);
-        obj.setAttribute("scale", `${size} ${size} ${size}`);
-        obj.setAttribute("position", "0 0.5 0");
-        obj.setAttribute("rotation", "-90 0 0");
-
-        marker.appendChild(obj);
-        container.appendChild(marker);
-
-        consoleDiv.innerHTML += `➤ Creado marker ID=${markerId}, barcode=${barcodeValue}<br>`;
+        consoleDiv.innerHTML += `➤ Creado marker para ${markerId}<br>`;
       })
       .catch((error) => {
             const consoleDiv = document.getElementById('consola-datos');
