@@ -12,8 +12,6 @@ firebase.initializeApp(firebaseConfig);
 // Inicializa Firestore
 const db = firebase.firestore();
 
-const coleccion = db.collection
-
 // Actualización del cubo según la base de datos
 window.onload = function() {
   const consoleDiv = document.getElementById('consola-datos');
@@ -60,6 +58,8 @@ window.onload = function() {
         ...doc.data()
       }));
 
+      consoleDiv.innerHTML = `Documentos obtenidos: ${docsArray.length}<br>`;
+
       documentos.forEach((el) => {
         const idMarker = el.id;
         const marker = this.document.createElement("a-marker");
@@ -83,6 +83,8 @@ window.onload = function() {
 
         marker.appendChild(obj);
         container.appendChild(marker);
+
+        consoleDiv.innerHTML += `➤ Creado marker ID=${markerId}, barcode=${barcodeValue}<br>`;
       })
       .catch((error) => {
             const consoleDiv = document.getElementById('consola-datos');
