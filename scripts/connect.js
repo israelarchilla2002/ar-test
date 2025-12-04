@@ -12,16 +12,16 @@ firebase.initializeApp(firebaseConfig);
 // Inicializa Firestore
 const db = firebase.firestore();
 
-// Función para obtener y aplicar los datos
+// Actualización del cubo según la base de datos
 window.onload = function() {
   const consoleDiv = document.getElementById('consola-datos');
     db.collection("modelos").doc("1").onSnapshot((doc) => {
             if (doc.exists) {
                 const data = doc.data();
                 
-                // Extrae el color y el tamaño
-                const color = data.clr_model || 'gray'; // Valor por defecto si no existe
-                const size = data.sz_model || 1; // Valor por defecto si no existe
+                // Por ahora solo color y tamaño para probar
+                const color = data.clr_model || 'gray';
+                const size = data.sz_model || 1;
                 
                 // Aplica los datos al marcador de A-Frame (Ejemplo con marcador 0)
                 const marker0Box = document.querySelector('a-marker[value="0"] a-box');
