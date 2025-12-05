@@ -51,22 +51,24 @@
         Esperando conexión con BBDD...
       </div>
         <!-- we add detectionMode and matrixCodeType to tell AR.js to recognize barcode markers -->
-      <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 5x5;'>
+        <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 5x5;'>
 
-        <!-- creo el div para ir inyectando los markers dinámicamente usando innerHTML -->
-      <div id="markers">
         <a-marker id="qr0" type='barcode' value='0'>
             <a-box position='0 0.5 0' rotation='-90 0 0'></a-box>
             <a-text value='Prueba del marcador 0\nAll OK' position='2 0.5 0'></a-text>
         </a-marker>
-      </div>
 
         <script src="scripts/connect.js"></script>
+
+        <a-marker type='barcode' value='1'>
+            <a-box position='0 0.5 0' color="blue" rotation='-90 0 0'></a-box>
+            <a-text value='Prueba del marcador 1\nAll OK' position='2 0.5 0' rotation='-90 0 0'></a-text>
+        </a-marker>
 
         <!-- use this <a-entity camera> to support multiple-markers, otherwise use <a-marker-camera> instead of </a-marker> -->
         <a-entity camera></a-entity>
         </a-scene>
-      
+    
     </body>
 </html>
 
