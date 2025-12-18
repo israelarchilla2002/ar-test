@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Prueba webapp AR - Hiro Marker</title>
-        <meta name="viewport" content="width=device-width">
+        <meta>
 
         <style>
           .arjs-loader {
@@ -26,32 +26,28 @@
           }
         </style>
 
-
+        <!-- Librerias importadas -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js" integrity="sha512-Znnj7n0C0Xz1tdk6ih39WPm3kSCTZEKnX/7WaNbySW7GFbwSjO5r9/uOAGLMbgv6llI1GdghC7xdaQsFUStM1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
+
+        <div id="desact" display="none"></div>
+
         
         </head>
 
     <body style='margin: 0px; overflow: hidden;'>
-      <div id="desact" display="none"></div>
 
-      <script src="scripts/connect.js"></script>
-      
-        <!-- we add detectionMode and matrixCodeType to tell AR.js to recognize barcode markers -->
-        <a-scene id="escena" embedded arjs='sourceType: webcam; sourceWidth: 1080; sourceHeight: 1920; displayWidth: 1080; displayHeight: 1920; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 4x4;'>
+        <a-scene id="escena" embedded arjs='sourceType: webcam; smooth: true; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 4x4;'>
           <!-- <a-entity gltf-model="modelos/decanter_v6_1.glb" scale="0.5 0.5 0.5"></a-entity> -->
           <a-entity camera></a-entity>
         </a-scene>
+    </body>
 
-        <!-- <script>
-          const modelo = document.querySelector('a-entity').object3DMap;
-          console.log(modelo);
-        </script> -->
-
+    <!-- Mis scripts -->
+        <script src="scripts/connect.js"></script>
         <script src="scripts/dinMarker.js"></script>
 
-    </body>
 </html>
 
 
