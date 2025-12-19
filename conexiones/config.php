@@ -38,5 +38,4 @@
     }
 
     mysqli_close($con);
-
 ?>

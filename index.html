@@ -38,16 +38,15 @@
 
     <body style='margin: 0px; overflow: hidden;'>
 
-        <a-scene id="escena" embedded arjs='sourceType: webcam; smooth: true; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 4x4;'>
+        <a-scene id="escena" vr-mode-ui="enabled: false" embedded arjs='sourceType: webcam; smooth: true; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 4x4;'>
           <!-- <a-entity gltf-model="modelos/decanter_v6_1.glb" scale="0.5 0.5 0.5"></a-entity> -->
-          <a-entity camera></a-entity>
+          <a-entity camera ></a-entity>
         </a-scene>
     </body>
 
     <!-- Mis scripts -->
-        <script src="scripts/connect.js"></script>
+        <script src="scripts/oliconnect.js"></script>
         <script src="scripts/dinMarker.js"></script>
+        <script src="scripts/orientacion.js"></script>
 
 </html>
-
-

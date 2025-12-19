@@ -1,6 +1,6 @@
 const escena = document.getElementById("escena");
 
-fetch('conexiones/getId.php')
+fetch('conexiones/oliid.php')
     .then(res => res.json())
     .then(ids => {
         for (let id of ids){
@@ -12,8 +12,8 @@ fetch('conexiones/getId.php')
           const modelo = document.createElement("a-entity");
           modelo.setAttribute("gltf-model", "modelos/decanter_v6_1.glb"); // TODO: Modificar para hacerlo dinámico dependiendo del id de tipo
           modelo.setAttribute("position", "0 0 0");
-          modelo.setAttribute("conexion-db",`markerId: ${id}; url: conexiones/config.php; interval: 500`);
-
+          modelo.setAttribute("conexion-oli",`markerId: ${id}; url: conexiones/oliconfig.php; interval: 500`);
+          modelo.setAttribute("scale", "0.02 0.02 0.02");
           // const top = document.createElement("a-entity");
           // top.setAttribute("position", "0 1 0");
           const topPlaneId = "topPlane" + id;

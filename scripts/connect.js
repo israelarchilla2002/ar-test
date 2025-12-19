@@ -1,3 +1,5 @@
+let idPaneles = 0
+
 AFRAME.registerComponent('conexion-db', {
   schema: {
     markerId: {type: 'string'},
@@ -7,6 +9,7 @@ AFRAME.registerComponent('conexion-db', {
 
   init: function () {
     // Referencia al div de consola
+    idPaneles = this.data.markerId
     this.consoleDiv = document.getElementById('consola-datos') || document.getElementById('desact');
     this.consoleDiv.innerHTML = 'connect.js se ha cargado correctamente.';
 
@@ -17,7 +20,11 @@ AFRAME.registerComponent('conexion-db', {
     // Event listeners para el marker
     this.markerEl.addEventListener('markerFound', this.startPolling.bind(this));
     this.markerEl.addEventListener('markerLost', this.stopPolling.bind(this));
-
+    
+    // Variables para la orientación
+    screen.orientation.addEventListener("change", (e) => {
+        this.orientacion(e);
+      });
     // Planos y textos
     this.topPlane = document.getElementById("topPlane" + this.data.markerId);
     this.botPlane = document.getElementById("botPlane" + this.data.markerId);
@@ -28,6 +35,17 @@ AFRAME.registerComponent('conexion-db', {
     if (!this.topPlane || !this.botPlane) {
       console.warn("No se encontraron los planos para el marker:", this.data.markerId);
     }
+
+    let orActual = window.innerWidth / window.innerHeight;
+
+    if(orActual <1){
+        this.topPlane.setAttribute("position", "0 0 -0.75");
+        this.botPlane.setAttribute("position", "0 0 1.5");
+    } else {
+        this.topPlane.setAttribute("position", "2 0 0");
+        this.botPlane.setAttribute("position", "-2 0 0")
+    }
+
   },
 
   startPolling: function() {
@@ -81,18 +99,18 @@ AFRAME.registerComponent('conexion-db', {
         let _y = data.y ? parseFloat(data.y) : 0;
         let _z = data.z ? parseFloat(data.z) : 0;
         this.el.setAttribute('rotation', { x: _x, y: _y, z: _z });
-
+        
         // Actualizar posición de los planos según aspect
-        let aspect = window.innerWidth / window.innerHeight;
-        if(this.topPlane && this.botPlane){
-          if(aspect >= 1){
-            this.topPlane.setAttribute("position", "2 0 0");
-            this.botPlane.setAttribute("position", "-2 0 0");
-          } else {
-            this.topPlane.setAttribute("position", "0 0 -0.75");
-            this.botPlane.setAttribute("position", "0 0 1.5");
-          }
-        }
+        // let aspect = window.innerWidth / window.innerHeight;
+        // if(this.topPlane && this.botPlane){
+        //   if(aspect >= 1){
+        //     this.topPlane.setAttribute("position", "2 0 0");
+        //     this.botPlane.setAttribute("position", "-2 0 0");
+        //   } else {
+        //     this.topPlane.setAttribute("position", "0 0 -0.75");
+        //     this.botPlane.setAttribute("position", "0 0 1.5");
+        //   }
+        // }
 
         // Actualizar textos
         if(this.topText){
@@ -129,6 +147,17 @@ AFRAME.registerComponent('conexion-db', {
           this.consoleDiv.style.color = "red";
         }
       });
+  },
+
+  orientacion: function(e) {
+    const type = e.target.type;
+    if(type === "portrait-primary" || type === "portrait-secondary"){
+        this.topPlane.setAttribute("position", "0 0 -0.75");
+        this.botPlane.setAttribute("position", "0 0 1.5");
+    } else {
+        this.topPlane.setAttribute("position", "2 0 0");
+        this.botPlane.setAttribute("position", "-2 0 0");
+    }
   },
 
   remove: function() {
