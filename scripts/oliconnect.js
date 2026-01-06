@@ -17,7 +17,7 @@ AFRAME.registerComponent('conexion-oli', {
   },
   init: function () {
     // Referencia al div de consola
-    idPaneles = this.data.markerId
+    idPaneles = this.data.markerId;
     this.consoleDiv = document.getElementById('consola-datos') || document.getElementById('desact');
     this.consoleDiv.innerHTML = 'oliconnect.js se ha cargado correctamente.';
 
@@ -31,8 +31,9 @@ AFRAME.registerComponent('conexion-oli', {
     
     // Variables para la orientación
     screen.orientation.addEventListener("change", (e) => {
-        this.orientacion(e);
+        this.updateOrientation(e);
       });
+
     // Planos y textos
     this.topPlane = document.getElementById("topPlane");
     this.botPlane = document.getElementById("botPlane");
@@ -45,6 +46,20 @@ AFRAME.registerComponent('conexion-oli', {
     if (!this.topPlane || !this.botPlane) {
       console.warn("No se encontraron los planos para el marker:", this.data.markerId);
     }
+
+    this.topPlane.addEventListener("click", () => {
+      if(!botPlane.classList.contains("fullscreen"))
+        topPlane.classList.toggle("fullscreen");
+      
+      botPlane.classList.toggle("invisible");
+    })
+
+    this.botPlane.addEventListener("click", () => {
+      if(!topPlane.classList.contains("fullscreen"))
+        botPlane.classList.toggle("fullscreen");
+
+      topPlane.classList.toggle("invisible");
+    })
 
     let orActual = window.innerWidth / window.innerHeight;
 
@@ -79,8 +94,17 @@ AFRAME.registerComponent('conexion-oli', {
       this.lastData = null;
       this.consoleDiv.innerHTML = `Parando polling para el marker con ID ${this.data.markerId}`;
     }
-    this.topPlane.classList.add("invisible");
-    this.botPlane.classList.add("invisible");
+    if(!this.topPlane.classList.contains("invisible"))
+      this.topPlane.classList.add("invisible");
+
+    if(!this.botPlane.classList.contains("invisible"))
+      this.botPlane.classList.add("invisible");
+
+    if(this.topPlane.classList.contains("fullscreen"))
+      this.topPlane.classList.remove("fullscreen");
+
+    if(this.botPlane.classList.contains("fullscreen"))
+      this.botPlane.classList.remove("fullscreen");
   },
 
   syncData: function(url) {
@@ -88,12 +112,16 @@ AFRAME.registerComponent('conexion-oli', {
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        if (JSON.stringify(data) === JSON.stringify(this.lastData)) return;
+        const dataChanged = JSON.stringify(data) !== JSON.stringify(this.lastData)
         this.lastData = data;
+        if (dataChanged && data[1]?.valor !== undefined){
 
         // Cambiar modelo según valor (IMPLEMENTACION NO FINAL PARA PRUEBA)
-        if(data[1].valor !== undefined){
           let modelo = "modelos/decanter_black.glb";
+
+          /////////////////////////////////////////////////////////////////////////////////////////////////////
+          //  OJO!!! ESTE PORCENTAJE ESTA PUESTO A MODO DE DEBUG. UTILIZAR OTRA MEDIDA EN VERSION FINAL!!!!  //
+          /////////////////////////////////////////////////////////////////////////////////////////////////////
           let porc = data[1].valor;
           if(0 <= porc && porc <= 30) modelo = "modelos/decanter_red.glb";
           else if(31 <= porc && porc <= 70) modelo = "modelos/decanter_yellow.glb";
@@ -107,23 +135,7 @@ AFRAME.registerComponent('conexion-oli', {
           }
         }
         // Actualizar textos
-        if(this.topText){
-            let textoArriba = `Etiqueta: ${data[0].etiqueta} (ID: ${data[0].primario})\nSecundario\n`;
-            data.forEach(e => {
-                textoArriba = textoArriba + `${e.nombre_ts}: ${e.valor}(${e.medida})\n`
-            });
-
-          this.topText.textContent = textoArriba;
-        }
-        if(this.botText){
-          let textoAbajo = `Etiqueta: ${data[0].etiqueta} (ID: ${data[0].primario})\nSecundario\n`;
-            data.forEach(e => {
-                textoAbajo = textoAbajo + `${e.nombre_ts}: \nId sec: ${e.tiposec}, Id subtipo sec: ${e.id_sts}`
-            });
-
-          this.botText.textContent = textoAbajo;
-        }
-      
+        this.updateText(data);
 
       })
       .catch(error => {
@@ -133,8 +145,34 @@ AFRAME.registerComponent('conexion-oli', {
         }
       });
   },
+  
+  updateText(data) {
+    //ACtualización de textos y tal
+    if(this.topText){
+            let textoArriba = `Etiqueta: ${data[0].etiqueta} (ID: ${data[0].primario})\r\nSecundario\r\n`;
+            if (this.topPlane.classList.contains("fullscreen")){
+              data.forEach(e => {
+                  textoArriba = textoArriba + `${e.nombre_ts}: ${e.valor}(${e.medida})\r\n`;
+              });
+          } else {
+            for(let i = 1;  i < 3 && i < data.length; i++){ //En la versión pequeña del recuadro solo imprimimos los 2 primeros valores
+              textoArriba = textoArriba + `${data[i].nombre_ts}: ${data[i].valor}(${data[i].medida})\r\n`;
+            }
+          }
 
-  orientacion: function(e) {
+          this.topText.textContent = textoArriba;
+        }
+        if(this.botText){
+          let textoAbajo = `Etiqueta: ${data[0].etiqueta} (ID: ${data[0].primario})\r\nSecundario:\r\n`;
+            data.forEach(e => {
+                textoAbajo = textoAbajo + `${e.nombre_ts}: \r\nId sec: ${e.tiposec}, Id subtipo sec: ${e.id_sts}`
+            });
+
+          this.botText.textContent = textoAbajo;
+        }
+  },
+
+  updateOrientation: function(e) {
     const type = e.target.type;
 
     if(type === "portrait-primary" || type === "portrait-secondary"){
