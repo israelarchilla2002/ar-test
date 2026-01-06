@@ -14,6 +14,7 @@ fetch('conexiones/oliid.php')
           modelo.setAttribute("position", "0 0 0");
           modelo.setAttribute("conexion-oli",`markerId: ${id}; url: conexiones/oliconfig.php; interval: 500`);
           modelo.setAttribute("scale", "0.02 0.02 0.02");
+          /*
           // const top = document.createElement("a-entity");
           // top.setAttribute("position", "0 1 0");
           const topPlaneId = "topPlane" + id;
@@ -22,6 +23,7 @@ fetch('conexiones/oliid.php')
           const topTextId = "topText" + id;
           const botTextId = "botText" + id;
 
+          
           const topPlane = document.createElement("a-plane");
           topPlane.setAttribute("width", 1.4);
           topPlane.setAttribute("height", 0.75);
@@ -67,6 +69,8 @@ fetch('conexiones/oliid.php')
 
           mark.appendChild(topPlane);
           mark.appendChild(botPlane);
+
+          */
 
           mark.appendChild(modelo);
           escena.appendChild(mark);

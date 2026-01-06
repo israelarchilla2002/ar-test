@@ -5,6 +5,8 @@
         <title>Prueba webapp AR - Hiro Marker</title>
         <meta>
 
+        <link rel="stylesheet" href="styles/styles.css">
+
         <style>
           .arjs-loader {
             height: 100%;
@@ -38,9 +40,26 @@
 
     <body style='margin: 0px; overflow: hidden;'>
 
+      <div id="hud">
+
+        <div id="topPlane" class="panel arriba invisible">
+
+          <span id="topText">arriba</span>
+
+        </div>
+
+        <div id="botPlane" class="panel abajo invisible">
+
+          <span id="botText">abajo</span>
+
+        </div>
+
+      </div>
+
         <a-scene id="escena" vr-mode-ui="enabled: false" embedded arjs='sourceType: webcam; smooth: true; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 4x4;'>
-          <!-- <a-entity gltf-model="modelos/decanter_v6_1.glb" scale="0.5 0.5 0.5"></a-entity> -->
+          <!-- <a-entity gltf-model="modelos/decanter_v6_1.glb" scale="0.5 0.5 0.5"></a-entity> -->         
           <a-entity camera ></a-entity>
+
         </a-scene>
     </body>
 

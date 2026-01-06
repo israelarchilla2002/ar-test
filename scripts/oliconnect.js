@@ -34,10 +34,10 @@ AFRAME.registerComponent('conexion-oli', {
         this.orientacion(e);
       });
     // Planos y textos
-    this.topPlane = document.getElementById("topPlane" + this.data.markerId);
-    this.botPlane = document.getElementById("botPlane" + this.data.markerId);
-    this.topText = document.getElementById("topText" + this.data.markerId);
-    this.botText = document.getElementById("botText" + this.data.markerId);
+    this.topPlane = document.getElementById("topPlane");
+    this.botPlane = document.getElementById("botPlane");
+    this.topText = document.getElementById("topText");
+    this.botText = document.getElementById("botText");
     this.scene = document.getElementById("escena");
 
     this.lastColor = "decanter_v6_1.glb";
@@ -61,6 +61,12 @@ AFRAME.registerComponent('conexion-oli', {
   startPolling: function() {
     if (this.timer !== null) return;
 
+    if(this.topPlane.classList.contains("invisible"))
+      this.topPlane.classList.remove("invisible");
+
+    if(this.botPlane.classList.contains("invisible"))
+      this.botPlane.classList.remove("invisible");
+
     const urlId = `${this.data.url}?id=${this.data.markerId}`;
     this.syncData(urlId);
     this.timer = setInterval(() => this.syncData(urlId), this.data.interval);
@@ -73,6 +79,8 @@ AFRAME.registerComponent('conexion-oli', {
       this.lastData = null;
       this.consoleDiv.innerHTML = `Parando polling para el marker con ID ${this.data.markerId}`;
     }
+    this.topPlane.classList.add("invisible");
+    this.botPlane.classList.add("invisible");
   },
 
   syncData: function(url) {
@@ -105,7 +113,7 @@ AFRAME.registerComponent('conexion-oli', {
                 textoArriba = textoArriba + `${e.nombre_ts}: ${e.valor}(${e.medida})\n`
             });
 
-          this.topText.setAttribute("value", textoArriba);
+          this.topText.textContent = textoArriba;
         }
         if(this.botText){
           let textoAbajo = `Etiqueta: ${data[0].etiqueta} (ID: ${data[0].primario})\nSecundario\n`;
@@ -113,7 +121,7 @@ AFRAME.registerComponent('conexion-oli', {
                 textoAbajo = textoAbajo + `${e.nombre_ts}: \nId sec: ${e.tiposec}, Id subtipo sec: ${e.id_sts}`
             });
 
-          this.botText.setAttribute("value", textoAbajo);
+          this.botText.textContent = textoAbajo;
         }
       
 
@@ -128,12 +136,30 @@ AFRAME.registerComponent('conexion-oli', {
 
   orientacion: function(e) {
     const type = e.target.type;
+
     if(type === "portrait-primary" || type === "portrait-secondary"){
-        this.topPlane.setAttribute("position", "0 0 -0.75");
-        this.botPlane.setAttribute("position", "0 0 1.5");
+
+        if(this.topPlane.classList.contains("izquierda"))
+          this.topPlane.classList.remove("izquierda");
+
+        this.topPlane.classList.add("arriba");
+
+        if(this.botPlane.classList.contains("derecha"))
+          this.botPlane.classList.remove("derecha");
+
+        this.botPlane.classList.add("abajo");
+
     } else {
-        this.topPlane.setAttribute("position", "2 0 0");
-        this.botPlane.setAttribute("position", "-2 0 0")
+      //Pone texto de arriba a la izquierda
+        if(this.topPlane.classList.contains("arriba"))
+          this.topPlane.classList.remove("arriba");
+
+        this.topPlane.classList.add("izquierda");
+      //Pone texto de abajo a la derecha
+        if(this.botPlane.classList.contains("abajo"))
+          this.botPlane.classList.remove("abajo");
+
+        this.botPlane.classList.add("derecha");
     }
   },
 

@@ -6,7 +6,7 @@
     $con = new mysqli($server, $user, $pass, $db);
 
     if($con->connect_error){
-        die(json_encode(["error" => "ERROR: Fallo de conexión con la BD en getId.php: " . $con->connect_error]));
+        die(json_encode(["error" => "ERROR: Fallo de conexión con la BD en oliid.php: " . $con->connect_error]));
     }
 
     $sql = "SELECT id FROM subtipoprimario";
