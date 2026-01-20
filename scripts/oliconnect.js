@@ -1,5 +1,5 @@
 
-let idPaneles = 0
+let idPaneles = 0;
 
 truncateDecimals = function (number, digits) {
     var multiplier = Math.pow(10, digits),
@@ -17,6 +17,7 @@ AFRAME.registerComponent('conexion-oli', {
   },
   init: function () {
     // Referencia al div de consola
+    this.datos = [];
     idPaneles = this.data.markerId;
     this.consoleDiv = document.getElementById('consola-datos') || document.getElementById('desact');
     this.consoleDiv.innerHTML = 'oliconnect.js se ha cargado correctamente.';
@@ -44,7 +45,7 @@ AFRAME.registerComponent('conexion-oli', {
     this.lastColor = "decanter_v6_1.glb";
 
     if (!this.topPlane || !this.botPlane) {
-      console.warn("No se encontraron los planos para el marker:", this.data.markerId);
+      console.warn("No se encontraron los divs intentando mostrar el marker:", this.data.markerId);
     }
 
     this.topPlane.addEventListener("click", () => {
@@ -52,6 +53,7 @@ AFRAME.registerComponent('conexion-oli', {
         topPlane.classList.toggle("fullscreen");
       
       botPlane.classList.toggle("invisible");
+      this.updateText();
     })
 
     this.botPlane.addEventListener("click", () => {
@@ -59,16 +61,16 @@ AFRAME.registerComponent('conexion-oli', {
         botPlane.classList.toggle("fullscreen");
 
       topPlane.classList.toggle("invisible");
+      this.updateText();
     })
 
     let orActual = window.innerWidth / window.innerHeight;
 
-    if(orActual <1){
-        this.topPlane.setAttribute("position", "0 0 -0.75");
-        this.botPlane.setAttribute("position", "0 0 1.5");
-    } else {
-        this.topPlane.setAttribute("position", "2 0 0");
-        this.botPlane.setAttribute("position", "-2 0 0")
+    if(orActual > 1){
+        this.topPlane.classList.remove("arriba");
+        this.topPlane.classList.add("izquierda");
+        this.botPlane.classList.remove("abajo");
+        this.botPlane.classList.add("derecha");
     }
 
   },
@@ -85,6 +87,12 @@ AFRAME.registerComponent('conexion-oli', {
     const urlId = `${this.data.url}?id=${this.data.markerId}`;
     this.syncData(urlId);
     this.timer = setInterval(() => this.syncData(urlId), this.data.interval);
+
+    if(this.topPlane.classList.contains("fullscreen"))
+      this.topPlane.classList.remove("fullscreen");
+
+    if(this.botPlane.classList.contains("fullscreen"))
+      this.botPlane.classList.remove("fullscreen");
   },
 
   stopPolling: function() {
@@ -100,11 +108,8 @@ AFRAME.registerComponent('conexion-oli', {
     if(!this.botPlane.classList.contains("invisible"))
       this.botPlane.classList.add("invisible");
 
-    if(this.topPlane.classList.contains("fullscreen"))
-      this.topPlane.classList.remove("fullscreen");
 
-    if(this.botPlane.classList.contains("fullscreen"))
-      this.botPlane.classList.remove("fullscreen");
+    
   },
 
   syncData: function(url) {
@@ -112,6 +117,7 @@ AFRAME.registerComponent('conexion-oli', {
     fetch(url)
       .then(res => res.json())
       .then(data => {
+        this.datos = data.slice();
         const dataChanged = JSON.stringify(data) !== JSON.stringify(this.lastData)
         this.lastData = data;
         if (dataChanged && data[1]?.valor !== undefined){
@@ -120,7 +126,7 @@ AFRAME.registerComponent('conexion-oli', {
           let modelo = "modelos/decanter_black.glb";
 
           /////////////////////////////////////////////////////////////////////////////////////////////////////
-          //  OJO!!! ESTE PORCENTAJE ESTA PUESTO A MODO DE DEBUG. UTILIZAR OTRA MEDIDA EN VERSION FINAL!!!!  //
+          //  OJO!!! ESTE PORCENTAJE ESTÁ PUESTO A MODO DE DEBUG. UTILIZAR OTRA MEDIDA EN VERSION FINAL!!!!  //
           /////////////////////////////////////////////////////////////////////////////////////////////////////
           let porc = data[1].valor;
           if(0 <= porc && porc <= 30) modelo = "modelos/decanter_red.glb";
@@ -135,7 +141,7 @@ AFRAME.registerComponent('conexion-oli', {
           }
         }
         // Actualizar textos
-        this.updateText(data);
+        this.updateText();
 
       })
       .catch(error => {
@@ -146,30 +152,33 @@ AFRAME.registerComponent('conexion-oli', {
       });
   },
   
-  updateText(data) {
+  updateText() {
+    if(this.datos[0].etiqueta && this.datos[0].etiqueta !== undefined){
     //ACtualización de textos y tal
     if(this.topText){
-            let textoArriba = `Etiqueta: ${data[0].etiqueta} (ID: ${data[0].primario})\r\nSecundario\r\n`;
+            let textoArriba = `Etiqueta: ${this.datos[0].etiqueta} (ID: ${this.datos[0].primario})\r\nSecundario\r\n`;
             if (this.topPlane.classList.contains("fullscreen")){
-              data.forEach(e => {
+              this.datos.forEach(e => {
                   textoArriba = textoArriba + `${e.nombre_ts}: ${e.valor}(${e.medida})\r\n`;
               });
           } else {
-            for(let i = 1;  i < 3 && i < data.length; i++){ //En la versión pequeña del recuadro solo imprimimos los 2 primeros valores
-              textoArriba = textoArriba + `${data[i].nombre_ts}: ${data[i].valor}(${data[i].medida})\r\n`;
+            for(let i = 1;  i < 3 && i < this.datos.length; i++){ //En la versión pequeña del recuadro solo imprimimos los 2 primeros valores
+              textoArriba = textoArriba + `${this.datos[i].nombre_ts}: ${this.datos[i].valor}(${this.datos[i].medida})\r\n`;
             }
           }
 
           this.topText.textContent = textoArriba;
+        
         }
         if(this.botText){
-          let textoAbajo = `Etiqueta: ${data[0].etiqueta} (ID: ${data[0].primario})\r\nSecundario:\r\n`;
-            data.forEach(e => {
+          let textoAbajo = `Etiqueta: ${this.datos[0].etiqueta} (ID: ${this.datos[0].primario})\r\nSecundario:\r\n`;
+            this.datos.forEach(e => {
                 textoAbajo = textoAbajo + `${e.nombre_ts}: \r\nId sec: ${e.tiposec}, Id subtipo sec: ${e.id_sts}`
             });
 
           this.botText.textContent = textoAbajo;
         }
+      }
   },
 
   updateOrientation: function(e) {

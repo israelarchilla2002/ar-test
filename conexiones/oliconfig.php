@@ -31,7 +31,6 @@
     ORDER BY s.valor desc
     ";
 
-    //TODO: Realizar consulta y encapsular datos para mostrarlos en el AR
     $res = $sql->query($consulta);
 
     if($res->num_rows > 0){
@@ -45,4 +44,6 @@
     } else {
         echo json_encode(["error" => "ERROR: El objeto indicado no existe."]);
     }
+
+    mysqli_close($sql);
 ?>
