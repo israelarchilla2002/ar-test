@@ -49,16 +49,18 @@ AFRAME.registerComponent('conexion-oli', {
     }
 
     this.topPlane.addEventListener("click", () => {
-      if(!botPlane.classList.contains("fullscreen"))
+      if(!botPlane.classList.contains("fullscreen")){
         topPlane.classList.toggle("fullscreen");
+      }
       
       botPlane.classList.toggle("invisible");
       this.updateText();
     })
 
     this.botPlane.addEventListener("click", () => {
-      if(!topPlane.classList.contains("fullscreen"))
+      if(!topPlane.classList.contains("fullscreen")){
         botPlane.classList.toggle("fullscreen");
+      }
 
       topPlane.classList.toggle("invisible");
       this.updateText();
